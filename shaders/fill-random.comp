@@ -1,0 +1,32 @@
+#version 430
+
+const int buffer_width = BUFFER_WIDTH;
+const int buffer_height = BUFFER_HEIGHT;
+
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+layout(binding=0, r32i) uniform iimage2D input_world;
+
+const uint seed = 0x45d9f3b - -3;
+
+uint hash(uint x) {
+    x = ((x >> 16) ^ x) * seed;
+    x = ((x >> 16) ^ x) * seed;
+    x = (x >> 16) ^ x;
+    return x;
+}
+
+const int range = 400;
+const bool no_range = false;
+
+void main() {
+    if(no_range || gl_GlobalInvocationID.x > buffer_width / 2 - range && gl_GlobalInvocationID.x < buffer_width / 2 + range && gl_GlobalInvocationID.y > buffer_height / 2 - range && gl_GlobalInvocationID.y < buffer_height / 2 + range) {
+        uint id = gl_GlobalInvocationID.x + gl_GlobalInvocationID.y * buffer_width;
+        uint val = (hash(id) % 5) == 0 ? 1 : 0;
+        
+        imageStore(input_world, ivec2(gl_GlobalInvocationID.xy), ivec4(val, 0, 0, 0));
+    }
+    else {
+        imageStore(input_world, ivec2(gl_GlobalInvocationID.xy), ivec4(0, 0, 0, 0));
+    }
+}
