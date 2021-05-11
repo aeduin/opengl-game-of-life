@@ -5,6 +5,8 @@ GameOfLife
 .vscode/
 
 # CMake
+*.cmake
+DartConfiguration.tcl
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
