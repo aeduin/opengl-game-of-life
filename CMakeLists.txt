@@ -8,6 +8,7 @@ add_executable(GameOfLife ./src/main.cpp)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+set(OpenGL_GL_PREFERENCE GLVND)
 include(CPack)
 
 find_package(OpenGL REQUIRED)
